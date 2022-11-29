@@ -26,6 +26,7 @@ static void crt_fatal_error(const char *msg) {
     return;
 }
 
+//
 void mini_crt_entry(void) {
     int ret = 0;
 
@@ -54,7 +55,7 @@ void mini_crt_entry(void) {
         cl++;
     }
 
-#else
+#else // Linux
     int    argc = 0;
     char **argv = NULL;
 
@@ -64,6 +65,7 @@ void mini_crt_entry(void) {
     argc = *(int *)(ebp_reg + 4);
     argv = (char **)(ebp_reg + 8);
 #elif defined(__x86_64__)
+/*
 #if __APPLE__
     long argcL = 0;
     long argvL = 0;
@@ -72,11 +74,12 @@ void mini_crt_entry(void) {
     argc = (int)argcL;
     argv = (char **)argvL;
 #elif __linux__
+*/
     char *rbp_reg = NULL;
     __asm__ __volatile__("mov %%rbp, %0" : "=r"(rbp_reg));
     argc = *(long *)(rbp_reg + 8);
     argv = (char **)(rbp_reg + 16);
-#endif
+//#endif
 #endif
 #endif
 
@@ -87,14 +90,13 @@ void mini_crt_entry(void) {
     if (mini_crt_io_init() != 0) {
         crt_fatal_error("IO initialize failed");
     }
-    /*do_global_ctors();*/
+    
     ret = main(argc, argv);
     exit(ret);
     return;
 }
 
 void exit(int exitCode) {
-    // mini_crt_call_exit_routine();
 #ifdef WIN32
     ExitProcess(exitCode);
 #elif defined(__i386__)

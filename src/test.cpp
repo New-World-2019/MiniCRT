@@ -12,13 +12,15 @@
 
 extern "C" int main(int argc, char *argv[]) {
     char   buf[128] = {0};
-    FILE * fpw      = fopen("test.txt", "w");
-    char **v        = (char **)malloc(argc * sizeof(char *));
+
+    FILE * fpw  = fopen("test.txt", "w");
+    char **v    = (char **)malloc(argc * sizeof(char *));
     for (int i = 0; i < argc; i++) {
         v[i] = (char *)malloc(strlen(argv[i]) + 1);
         strcpy(v[i], argv[i]);
     }
 
+    // 写入到文件
     for (int i = 0; i < argc; i++) {
         fprintf(fpw, "%s\t", v[i]);
     }

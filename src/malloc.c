@@ -145,7 +145,7 @@ static void *mmap(uint64_t len) {
 #endif
 
 int32_t mini_crt_heap_init() {
-    // 32MB heap size
+    // 申请堆大小 32MB 
     uint64_t heap_size = 1024 * 1024 * 32;
 
 #ifdef WIN32

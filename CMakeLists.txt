@@ -3,9 +3,10 @@
 # 
 # CMakeLists.txt for MRNIU/MiniCRT.
 
-# Set minimum cmake version
+# 设置 cmake 最小版本
 cmake_minimum_required(VERSION 3.10)
 
+# 指定项目名和语言 project命令：https://blog.csdn.net/mataojie/article/details/121228251
 project(MiniCRT LANGUAGES C CXX)
 
 if(${MiniCRT_SOURCE_DIR} STREQUAL ${MiniCRT_BINARY_DIR})
