@@ -1,9 +1,3 @@
-
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// stdio.c for MRNIU/MiniCRT.
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,13 +6,16 @@ extern "C" {
 #include "unistd.h"
 #include "string.h"
 
-int mini_crt_io_init() {
+// 暂没实现
+int mini_crt_io_init() 
+{
     return 0;
 }
 
 #ifdef WIN32
 #include <Windows.h>
-FILE *fopen(const char **filename, const char *mode) {
+FILE *fopen(const char **filename, const char *mode) 
+{
     HANDLE hfile    = 0;
     int    access   = 0;
     int    creation = 0;
@@ -51,7 +48,8 @@ FILE *fopen(const char **filename, const char *mode) {
     return (FILE *)hFile;
 }
 
-int fread(void *buffer, int size, int count, FILE *stream) {
+int fread(void *buffer, int size, int count, FILE *stream) 
+{
     int read = 0;
     if (!ReadFile((HANDLE)stream, buffer, size * count, &read, 0)) {
         return 0;
@@ -59,7 +57,8 @@ int fread(void *buffer, int size, int count, FILE *stream) {
     return read;
 }
 
-int fwrite(const void *buffer, int size, int count, FILE *stream) {
+int fwrite(const void *buffer, int size, int count, FILE *stream) 
+{
     int written = 0;
     if (!WriteFile((HANDLE)stream, buffer, size * count, &written, 0)) {
         return 0;
@@ -67,26 +66,22 @@ int fwrite(const void *buffer, int size, int count, FILE *stream) {
     return written;
 }
 
-int fclose(FILE *fp) {
+int fclose(FILE *fp) 
+{
     return CloseHandle((HANDLE)fp);
 }
 
-int fseek(FILE *fp, int offest, int set) {
+int fseek(FILE *fp, int offest, int set) 
+{
     return SetFilePointer((HANDLE)fp, offest, 0, set);
 }
 
 #else
 
-static int64_t read(int fd, void *buffer, uint64_t size) {
+static int64_t read(int fd, void *buffer, uint64_t size) 
+{
     int64_t ret = 0;
 #if defined(__i386__)
-    // __asm__ __volatile__("mov $3,%%eax	\n\t"
-    //                      "mov %1,%%ebx	\n\t"
-    //                      "mov %2,%%ecx	\n\t"
-    //                      "mov %3,%%edx	\n\t"
-    //                      "int $0x80		\n\t"
-    //                      : "=m"(ret)
-    //                      : "m"(fd), "m"(buffer), "m"(size));
     __asm__ __volatile__("int $0x80"
                          : "=m"(ret)
                          : "a"(SYSCALL_read), "b"(fd), "c"(buffer),
@@ -99,17 +94,10 @@ static int64_t read(int fd, void *buffer, uint64_t size) {
     return ret;
 }
 
-static int64_t write(int fd, const void *buffer, uint64_t size) {
+static int64_t write(int fd, const void *buffer, uint64_t size) 
+{
     int64_t ret = 0;
 #if defined(__i386__)
-    // __asm__ __volatile__("mov $4,%%eax	\n\t"
-    //                      "mov %1,%%ebx	\n\t"
-    //                      "mov %2,%%ecx	\n\t"
-    //                      "mov %3,%%edx	\n\t"
-    //                      "int $0x80		\n\t"
-    //                      "mov %%eax,%0	\n\t"
-    //                      : "=m"(ret)
-    //                      : "m"(fd), "m"(buffer), "m"(size));
     __asm__ __volatile__("int $0x80"
                          : "=m"(ret)
                          : "a"(SYSCALL_write), "b"(fd), "c"(buffer),
@@ -122,16 +110,10 @@ static int64_t write(int fd, const void *buffer, uint64_t size) {
     return ret;
 }
 
-static int64_t open(const char *pathname, int flags, int mode) {
+static int64_t open(const char *pathname, int flags, int mode)
+{
     int fd = 0;
 #if defined(__i386__)
-    // __asm__ __volatile__("mov $5,%%eax	\n\t"
-    //                      "mov %1,%%ebx	\n\t"
-    //                      "mov %2,%%ecx	\n\t"
-    //                      "mov %3,%%edx	\n\t"
-    //                      "int $0x80		\n\t"
-    //                      : "=m"(fd)
-    //                      : "m"(pathname), "m"(flags), "m"(mode));
     __asm__ __volatile__("int $0x80"
                          : "=m"(fd)
                          : "a"(SYSCALL_open), "b"(pathname), "c"(flags),
@@ -145,7 +127,8 @@ static int64_t open(const char *pathname, int flags, int mode) {
     return fd;
 }
 
-static int64_t close(int fd) {
+static int64_t close(int fd) 
+{
     int64_t ret = 0;
 #if defined(__i386__)
     __asm__ __volatile__("mov $6,%%eax	\n\t"
@@ -160,17 +143,10 @@ static int64_t close(int fd) {
     return ret;
 }
 
-static int64_t seek(int fd, uint64_t offest, int mode) {
+static int64_t seek(int fd, uint64_t offest, int mode)
+{
     int64_t ret = 0;
 #if defined(__i386__)
-    // __asm__ __volatile__("mov $19,%%eax	\n\t"
-    //                      "mov %1,%%ebx	\n\t"
-    //                      "mov %2,%%ecx	\n\t"
-    //                      "mov %3,%%edx	\n\t"
-    //                      "int $0x80		\n\t"
-    //                      "mov %%eax,%0	\n\t"
-    //                      : "=m"(ret)
-    //                      : "m"(fd), "m"(offest), "m"(mode));
     __asm__ __volatile__("int $0x80"
                          : "=m"(ret)
                          : "a"(SYSCALL_lseek), "b"(fd), "c"((uint32_t)offest),
@@ -183,16 +159,19 @@ static int64_t seek(int fd, uint64_t offest, int mode) {
     return ret;
 }
 
-int64_t fread(void *buffer, uint64_t size, uint64_t count, FILE *stream) {
+// 封装的 read，仿 Glibc 的 fread，但没作过多处理
+int64_t fread(void *buffer, uint64_t size, uint64_t count, FILE *stream)
+{
     return read((int)(long)stream, buffer, size * count);
 }
 
-int64_t fwrite(const void *buffer, uint64_t size, uint64_t count,
-               FILE *stream) {
+int64_t fwrite(const void *buffer, uint64_t size, uint64_t count, FILE *stream) 
+{
     return write((int)(long)stream, buffer, size * count);
 }
 
-FILE *fopen(const char *filename, const char *mode) {
+FILE *fopen(const char *filename, const char *mode)
+{
     int fd    = -1;
     int flags = 0;
     // 文件权限
@@ -214,11 +193,13 @@ FILE *fopen(const char *filename, const char *mode) {
     return (FILE *)(long)fd;
 }
 
-int64_t fclose(FILE *fp) {
+int64_t fclose(FILE *fp)
+{
     return close((int)(long)fp);
 }
 
-int64_t fseek(FILE *fp, uint64_t offest, int set) {
+int64_t fseek(FILE *fp, uint64_t offest, int set)
+{
     return seek((int)(long)fp, offest, set);
 }
 
@@ -226,4 +207,4 @@ int64_t fseek(FILE *fp, uint64_t offest, int set) {
 }
 #endif
 
-#endif /* WIN32 */
+#endif

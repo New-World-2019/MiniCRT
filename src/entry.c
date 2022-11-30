@@ -1,9 +1,3 @@
-
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// entry.c for MRNIU/MiniCRT.
-
 #include "minicrt.h"
 #include "stddef.h"
 #include "unistd.h"
@@ -26,7 +20,6 @@ static void crt_fatal_error(const char *msg) {
     return;
 }
 
-//
 void mini_crt_entry(void) {
     int ret = 0;
 
@@ -73,15 +66,18 @@ void mini_crt_entry(void) {
 #endif
 #endif
 #endif
-
+    
+    // 堆初始化
     if (mini_crt_heap_init() != 0) {
         crt_fatal_error("heap initialize failed");
     }
 
+    // io 初始化
     if (mini_crt_io_init() != 0) {
         crt_fatal_error("IO initialize failed");
     }
     
+    // 执行 main
     ret = main(argc, argv);
     exit(ret);
     return;

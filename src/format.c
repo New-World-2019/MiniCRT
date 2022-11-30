@@ -1,9 +1,3 @@
-
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// format.c for MRNIU/MiniCRT.
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -14,7 +8,8 @@ extern "C" {
 #include "string.h"
 #include "port.h"
 
-int fputc(int c, FILE *stream) {
+int fputc(int c, FILE *stream)
+{
     int res = c;
     if (fwrite(&c, 1, 1, stream) != 1) {
         res = EOF;
@@ -22,7 +17,8 @@ int fputc(int c, FILE *stream) {
     return res;
 }
 
-int fputs(const char *str, FILE *stream) {
+int fputs(const char *str, FILE *stream)
+{
     int len = strlen(str);
     if (fwrite(str, len, 1, stream) != len) {
         len = EOF;
@@ -59,7 +55,8 @@ static int skip_atoi(const char **s) {
 #define SMALL 64
 
 // 除操作。n 被除数；base 除数。结果 n 为商，函数返回值为余数。
-int32_t do_div(int *n, int base) {
+int32_t do_div(int *n, int base)
+{
     int32_t res = 0;
     res         = *n % base;
     *n          = *n / base;
@@ -179,7 +176,8 @@ static char *number(char *str, int num, int base, int size, int precision,
 // 在内核实现了该 C 标准函数。 其中参数 fmt 是格式字符串；args
 // 是个数变化的值；buf 是输出字符缓冲区。请参见本代码列表后面
 // 的有关格式转换字符的介绍。
-int32_t vsprintf(char *buf, const char *fmt, va_list args) {
+int32_t vsprintf(char *buf, const char *fmt, va_list args)
+{
     int32_t len;
     int32_t i;
     // 用于存放转换过程中的字符串
@@ -407,7 +405,8 @@ int32_t vsprintf(char *buf, const char *fmt, va_list args) {
     return str - buf;
 }
 
-int printf(const char *format, ...) {
+int printf(const char *format, ...)
+{
     va_list args;
     int32_t i;
     va_start(args, format);
@@ -419,7 +418,8 @@ int printf(const char *format, ...) {
     return i;
 }
 
-int fprintf(FILE *stream, const char *format, ...) {
+int fprintf(FILE *stream, const char *format, ...)
+{
     va_list args;
     int32_t i;
     va_start(args, format);

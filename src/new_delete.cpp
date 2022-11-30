@@ -1,9 +1,3 @@
-
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// new_delete.cpp for MRNIU/MiniCRT.
-
 #include "stdlib.h"
 #include "port.h"
 

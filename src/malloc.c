@@ -1,8 +1,13 @@
+/**
+ * @file malloc.c
+ * @brief 内存分配
+ * @version 0.1
+ * @date 2022-11-30
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// malloc.c for MRNIU/MiniCRT.
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +35,9 @@ typedef struct heap_header {
 
 static heap_header_t *list_head = NULL;
 
-void free(void *ptr) {
+// 释放
+void free(void *ptr)
+{
     heap_header_t *header = (heap_header_t *)ADDR_ADD(ptr, -HEADER_SIZE);
     if (header->type != HEAP_BLOCK_USED) {
         return;
@@ -53,16 +60,17 @@ void free(void *ptr) {
     }
 }
 
-void *malloc(uint64_t size) {
-    if (size == 0) {
-        return NULL;
-    }
+// 分配 size 的空间
+void *malloc(uint64_t size)
+{
+    if (size == 0) return NULL;
     heap_header_t *header = list_head;
     while (header != NULL) {
-        if (header->type == HEAP_BLOCK_USED) {
+        if (header->type == HEAP_BLOCK_USED) { // 当前节点已被分配
             header = header->next;
             continue;
         }
+
         // 块大小足够 size，但是不够分配 HEADER_SIZE
         if (header->size > size + HEADER_SIZE &&
             header->size <= size + HEADER_SIZE * 2) {
@@ -144,6 +152,7 @@ static void *mmap(uint64_t len) {
 }
 #endif
 
+// 堆初始化
 int32_t mini_crt_heap_init() {
     // 申请堆大小 32MB 
     uint64_t heap_size = 1024 * 1024 * 32;

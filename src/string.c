@@ -1,8 +1,12 @@
-
-// This file is a part of MRNIU/MiniCRT
-// (https://github.com/MRNIU/MiniCRT).
-//
-// string.c for MRNIU/MiniCRT.
+/**
+ * @file string.c
+ * @brief 封装的字符串处理函数，与操作系统底层无关
+ * @version 0.1
+ * @date 2022-11-30
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,10 +16,9 @@ extern "C" {
 #include "stddef.h"
 
 // 获取字符串长度
-uint64_t strlen(const char *str) {
-    if (str == NULL) {
-        return 0;
-    }
+uint64_t strlen(const char *str)
+{
+    if (str == NULL) return 0;
     uint64_t len = 0;
     while (str[len]) {
         len++;
@@ -25,7 +28,8 @@ uint64_t strlen(const char *str) {
 
 // 如果 src > dest, 则返回值大于 0，如果 src = dest, 则返回值等于 0，
 // 如果 srd  < dest ,则返回值小于 0。
-int8_t strcmp(const char *src, const char *dest) {
+int8_t strcmp(const char *src, const char *dest)
+{
     while (*src && *dest && (*src == *dest)) {
         src++;
         dest++;
@@ -33,7 +37,8 @@ int8_t strcmp(const char *src, const char *dest) {
     return *src - *dest;
 }
 
-char *strcpy(char *dest, const char *src) {
+char *strcpy(char *dest, const char *src)
+{
     char *address = dest;
     while ((*dest++ = *src++) != '\0') {
         ;
@@ -41,18 +46,21 @@ char *strcpy(char *dest, const char *src) {
     return address;
 }
 
-void backspace(char *src) {
+void backspace(char *src)
+{
     uint64_t len = strlen(src);
     src[len - 1] = '\0';
 }
 
-void append(char *src, char dest) {
+void append(char *src, char dest)
+{
     uint64_t len = strlen(src);
     src[len]     = dest;
     src[len + 1] = '\0';
 }
 
-char *strcat(char *dest, const char *src) {
+char *strcat(char *dest, const char *src)
+{
     uint8_t *add_d = (uint8_t *)dest;
     if (dest != NULL && src != NULL) {
         while (*add_d) {
@@ -65,7 +73,8 @@ char *strcat(char *dest, const char *src) {
     return dest;
 }
 
-void memcpy(void *dest, void *src, uint32_t len) {
+void memcpy(void *dest, void *src, uint32_t len)
+{
     uint8_t *sr  = (uint8_t *)src;
     uint8_t *dst = (uint8_t *)dest;
     while (len != 0) {
@@ -73,17 +82,20 @@ void memcpy(void *dest, void *src, uint32_t len) {
         len--;
     }
 }
-void memset(void *dest, uint8_t val, uint32_t len) {
+void memset(void *dest, uint8_t val, uint32_t len)
+{
     for (uint8_t *dst = (uint8_t *)dest; len != 0; len--) {
         *dst++ = val;
     }
 }
 
-void bzero(void *dest, uint32_t len) {
+void bzero(void *dest, uint32_t len)
+{
     memset(dest, 0, len);
 }
 
-char *itoa(int n, char *str, int radix) {
+char *itoa(int n, char *str, int radix)
+{
     char  digit[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     char *p       = str;
     char *head    = str;
